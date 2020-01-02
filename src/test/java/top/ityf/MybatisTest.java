@@ -65,9 +65,9 @@ public class MybatisTest {
     @Test
     public void testSaveUser() {
         User user = new User();
-        user.setUserName("modify user property");
-        user.setUserAddress("武汉市武昌区");
-        user.setUserSex("女");
+        user.setUserName("parameterMap User");
+        user.setUserAddress("昆明市官渡区");
+        user.setUserSex("男");
         user.setUserBirthday(new Date());
         System.out.println("保存操作之前：" + user);
         userDao.saveUser(user);
@@ -81,9 +81,9 @@ public class MybatisTest {
     public void testUpdateUser() {
         User user = new User();
         //这里必须要设置id，否则将会更新整张表
-        user.setUserId(21);
-        user.setUserName("张无忌");
-        user.setUserAddress("天津市滨海新区");
+        user.setUserId(36);
+        user.setUserName("五竹");
+        user.setUserAddress("儋州市洪山区");
         user.setUserSex("男");
         user.setUserBirthday(new Date());
 
@@ -96,7 +96,7 @@ public class MybatisTest {
      */
     @Test
     public void testDelete() {
-        userDao.deleteUser(28);
+        userDao.deleteUser(37);
     }
 
     /**
@@ -104,7 +104,7 @@ public class MybatisTest {
      */
     @Test
     public void testFindOne() {
-        User user = userDao.findById(22);
+        User user = userDao.findById(36);
         System.out.println(user);
     }
 

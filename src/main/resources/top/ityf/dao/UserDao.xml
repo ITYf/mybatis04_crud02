@@ -3,11 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.ityf.dao.UserDao">
+
     <!-- 配置 查询结果的列名和实体类的属性名的对应关系 -->
-    <resultMap id="userMap" type="top.ityf.domain.User">
+    <resultMap id="userResultMap" type="top.ityf.domain.User">
         <!-- 主键字段的对应 -->
         <id property="userId" column="id"/>
         <!-- 非主键字段的对应 -->
+        <!-- property 是实体类中的属性名，column是表中的字段 -->
         <result property="userName" column="username"/>
         <result property="userAddress" column="address"/>
         <result property="userSex" column="sex"/>
@@ -15,12 +17,20 @@
     </resultMap>
 
 
-    <select id="findAll" resultMap="userMap"><!--这里不再是resultType了-->
+    <!--配置 输入参数的列名和实体类的属性名的对应关系 -->
+    <parameterMap id="userParameterMap" type="top.ityf.domain.User">
+        <parameter property="userName" resultMap="userResultMap"/>
+        <parameter property="userAddress" resultMap="userResultMap"/>
+        <parameter property="userSex" resultMap="userResultMap"/>
+        <parameter property="userBirthday" resultMap="userResultMap"/>
+    </parameterMap>
+
+    <select id="findAll" resultMap="userResultMap"><!--这里不再是resultType了-->
         <!--select id as userId,username,address as userAddress,sex as userSex,birthday as userBirthday from user;-->
         select * from user ;
     </select>
 
-    <insert id="saveUser" parameterType="top.ityf.domain.User">
+    <insert id="saveUser" parameterMap="userParameterMap">
         <!-- 配置插入操作后，获取插入数据的id -->
         <!-- keyProperty必须和pojo的属性名一一对应 -->
         <selectKey keyProperty="userId" keyColumn="id" order="AFTER" resultType="int">
@@ -29,7 +39,7 @@
         insert into user(username,address,sex,birthday) values(#{userName},#{userAddress},#{userSex},#{userBirthday})
     </insert>
 
-    <update id="updateUser" parameterType="top.ityf.domain.User">
+    <update id="updateUser" parameterMap="userParameterMap">
         update user set username=#{userName},address=#{userAddress},sex=#{userSex},birthday=#{userBirthday} where id=#{userId}
     </update>
 
@@ -37,11 +47,11 @@
         delete from user where id=#{id}
     </update>
 
-    <select id="findById" parameterType="Integer" resultType="top.ityf.domain.User">
+    <select id="findById" parameterType="Integer" resultMap="userResultMap">
         select * from user where id=#{id}
     </select>
 
-    <select id="findByName" resultType="top.ityf.domain.User" parameterType="string">
+    <select id="findByName" resultMap="userResultMap" parameterType="string">
         select * from user where username like #{name}
     </select>
 
